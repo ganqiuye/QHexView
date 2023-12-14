@@ -46,7 +46,7 @@ class QHexView: public QAbstractScrollArea
 		~QHexView();
 
 	public slots:
-		void setData(DataStorage *pData);
+        void setData(DataStorage *pData, int offset = 0);
 		void clear();
 		void showFromOffset(std::size_t offset);
 		void setSelected(std::size_t offset, std::size_t length);
@@ -71,6 +71,7 @@ class QHexView: public QAbstractScrollArea
 		std::size_t           m_selectInit;
 		std::size_t           m_cursorPos;
 		std::size_t           m_bytesPerLine;
+        std::size_t           m_offset;
 
 		QSize fullSize() const;
 		void updatePositions();

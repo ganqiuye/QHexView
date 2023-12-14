@@ -48,13 +48,14 @@ QHexView::~QHexView()
 		delete m_pdata;
 }
 
-void QHexView::setData(QHexView::DataStorage *pData)
+void QHexView::setData(QHexView::DataStorage *pData, int offset)
 {
 	QMutexLocker lock(&m_dataMtx);
 
 	verticalScrollBar()->setValue(0);
 	if(m_pdata)
 		delete m_pdata;
+    m_offset = offset;
 	m_pdata = pData;
 	m_cursorPos = 0;
 	resetSelection(0);
@@ -173,7 +174,7 @@ void QHexView::paintEvent(QPaintEvent *event)
 
 	for (int lineIdx = firstLineIdx, yPos = yPosStart;  lineIdx < lastLineIdx; lineIdx += 1, yPos += m_charHeight)
 	{
-		QString address = QString("%1").arg(lineIdx * m_bytesPerLine, 10, 16, QChar('0'));
+        QString address = QString("%1").arg(lineIdx * m_bytesPerLine + m_offset, 10, 16, QChar('0'));
 		painter.drawText(m_posAddr, yPos, address);
 
 		for(int xPos = m_posHex, i=0; i< m_bytesPerLine && ((lineIdx - firstLineIdx) * m_bytesPerLine + i) < data.size(); i++, xPos += 3 * m_charWidth)
